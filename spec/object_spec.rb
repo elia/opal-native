@@ -1,46 +1,46 @@
 require File.expand_path('../spec_helper', __FILE__)
 
 describe Native::Object do
-	before do
-		@object = `{
-			a: 42,
+  before do
+    @object = `{
+      a: 42,
 
-			b: function () {
-				return 42;
-			},
+      b: function () {
+        return 42;
+      },
 
-			c: function () {
-				return { a: 23 };
-			},
+      c: function () {
+        return { a: 23 };
+      },
 
-			d: function (a, h) {
-				return h({a: a});
-			}
-		}`
+      d: function (a, h) {
+        return h({a: a});
+      }
+    }`
 
-		@test = Kernel.Native(@object)
-	end
+    @test = Kernel.Native(@object)
+  end
 
-	it 'wraps an object properly' do
-		`#{@test.to_native} == #{@object}`.should be_true
-	end
+  it 'wraps an object properly' do
+    `#{@test.to_native} == #{@object}`.should be_true
+  end
 
-	it 'makes an accessor properly' do
-		@test.a.should == 42
-		@test.a = 23
-		@test.a.should == 23
-		`#@object.a`.should == 23
-	end
+  it 'makes an accessor properly' do
+    @test.a.should == 42
+    @test.a = 23
+    @test.a.should == 23
+    `#@object.a`.should == 23
+  end
 
-	it 'calls a function as a method when present' do
-		@test.b.should == 42
-	end
+  it 'calls a function as a method when present' do
+    @test.b.should == 42
+  end
 
-	it 'calls a function as a method when present and returns a Native' do
-		@test.c.a.should == 23
-	end
+  it 'calls a function as a method when present and returns a Native' do
+    @test.c.a.should == 23
+  end
 
-	it 'calls handlers with proper wrapping' do
-		@test.d(23) { |o| o.a }.should == 23
-	end
+  it 'calls handlers with proper wrapping' do
+    @test.d(23) { |o| o.a }.should == 23
+  end
 end
